@@ -81,3 +81,32 @@ CREATE TABLE IF NOT EXISTS tareas (
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
   FOREIGN KEY (creada_por) REFERENCES usuarios(id)
 );
+
+-- Actividades de Mantenimiento
+CREATE TABLE IF NOT EXISTS actividades (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  nombre TEXT NOT NULL,
+  tipo ENUM('preventivo', 'correctivo', 'diagnostico') NOT NULL,
+  tipo_respuesta ENUM('single_choice', 'multiple_choice') NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS posibles_respuestas (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  actividad_id INT NOT NULL,
+  label VARCHAR(100) NOT NULL,
+  value VARCHAR(100) NOT NULL,
+  FOREIGN KEY (actividad_id) REFERENCES actividades(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS clientes (
+  id INT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL UNIQUE,
+  nombre_completo VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS proyectos (
+  id INT PRIMARY KEY,
+  nombre TEXT NOT NULL
+);
+

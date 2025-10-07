@@ -1,21 +1,24 @@
+# config.py (Versión Corregida)
 from pydantic_settings import BaseSettings
-from pydantic import Field
 
 class Settings(BaseSettings):
+    # Valores que no son secretos pueden tener un default
     APP_NAME: str = "Backend Mantenimiento"
     APP_ENV: str = "dev"
-
-    DB_HOST: str = "localhost"
-    DB_PORT: int = 3306
-    DB_USER: str = "app_user"
-    DB_PASSWORD: str = "change_this"
-    DB_NAME: str = "mantenimiento"
-
-    JWT_SECRET: str = "please_change_me"
     JWT_ALG: str = "HS256"
-    ACCESS_TOKEN_TTL_MINUTES: int = 15  # corto; sesión total se gobierna con refresh TTL
-
+    ACCESS_TOKEN_TTL_MINUTES: int = 15
     SINGLE_SESSION_PER_USER: bool = False
+
+    # --- VALORES SENSIBLES ---
+    # No les ponemos valor por defecto para obligar
+    # a que se lean desde el archivo .env
+    DB_HOST: str
+    DB_PORT: int
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_NAME: str
+    JWT_SECRET: str
+    MASTER_API_KEY: str
 
     class Config:
         env_file = ".env"

@@ -1,3 +1,4 @@
+# app/auth.py
 import jwt
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
@@ -9,7 +10,8 @@ def now_utc() -> datetime:
 
 def create_access_token(sub: int, rol_id: int, minutes: int) -> Tuple[str, int]:
     exp = now_utc() + timedelta(minutes=minutes)
-    payload = {"sub": sub, "rolId": rol_id, "exp": int(exp.timestamp())}
+    # Aseguramos que el 'sub' sea un string para cumplir con el estándar JWT
+    payload = {"sub": str(sub), "rolId": rol_id, "exp": int(exp.timestamp())}
     token = jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
     return token, int(minutes * 60)
 
@@ -22,4 +24,3 @@ def hash_refresh_token(raw: str) -> str:
 def generate_refresh_token() -> str:
     import secrets
     return secrets.token_urlsafe(48)
-

@@ -1,11 +1,9 @@
-pydantic-settings
-python-dotenv
-passlib[bcrypt]
-PyJWT
+fastapi
+uvicorn[standard]
+sqlalchemy
 mysqlclient
 pydantic
 pydantic-settings
-sqlalchemy
-pymysql
-fastapi
-uvicorn[standard]
+passlib[bcrypt]
+PyJWT
+python-dotenv
