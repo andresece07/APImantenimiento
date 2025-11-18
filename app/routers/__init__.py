@@ -1,1 +1,1 @@
-from . import auth, usuarios, tareas, parametros
+from . import auth, usuarios, tareas, parametros, actividades, catalogos

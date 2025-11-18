@@ -20,7 +20,8 @@ class UsuarioOut(BaseModel):
     email: str
     rol_id: int
     activo: bool
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class UsuarioCreate(BaseModel):
     nombre: str
@@ -45,42 +46,49 @@ class TokenPair(BaseModel):
 class ProyectoOut(BaseModel):
     id: int
     nombre: str
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class ClienteOut(BaseModel):
     id: int
     nombre: str
     nombre_completo: Optional[str] = None
     proyectos: List[ProyectoOut] = []
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class AgenciaOut(BaseModel):
     id: int
     nombre: str
     unidad_negocio_id: int
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class CiudadOut(BaseModel):
     id: int
     nombre: str
     agencias: List[AgenciaOut] = []
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class ProvinciaOut(BaseModel):
     id: int
     nombre: str
     ciudades: List[CiudadOut] = []
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class UnidadNegocioOut(BaseModel):
     id: int
     nombre: str
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class EstadoEquipoOut(BaseModel):
     id: int
     nombre: str
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class EquipoOut(BaseModel):
     id: str
@@ -94,13 +102,16 @@ class EquipoOut(BaseModel):
     unidad_negocio_id: int
     agencia_id: int
     estado_id: int
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
+# --- Schemas de Tareas y Actividades (AQUÍ ESTÁ LO QUE FALTABA) ---
 class TareaOut(BaseModel):
     id: int
     usuario_id: int
     equipo: EquipoOut
-    class Config: from_attributes = True
+    class Config:
+        from_attributes = True
 
 class TareaCreate(BaseModel):
     usuario_id: int
@@ -109,6 +120,23 @@ class TareaCreate(BaseModel):
 class TareaUpdate(BaseModel):
     usuario_id: Optional[int] = None
     equipo_id: Optional[str] = None
+
+class PosibleRespuestaOut(BaseModel):
+    id: int
+    label: str
+    value: str
+    respuesta_condicional: str
+    class Config:
+        from_attributes = True
+
+class ActividadOut(BaseModel):
+    id: int
+    nombre: str
+    tipo: str
+    tipo_respuesta: str
+    posibles_respuestas: List[PosibleRespuestaOut] = []
+    class Config:
+        from_attributes = True
 
 # --- Schemas de Respuestas Compuestas de API ---
 class LoginResponse(BaseModel):

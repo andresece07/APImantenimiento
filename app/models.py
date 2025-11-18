@@ -100,7 +100,7 @@ class Equipo(Base):
     agencia_id: Mapped[int] = mapped_column(ForeignKey("agencias.id"))
     estado_id: Mapped[int] = mapped_column(ForeignKey("estados_equipo.id"))
 
-# --- Modelos Operativos ---
+# --- Modelos Operativos (Tareas y Actividades) ---
 
 class Tarea(Base):
     __tablename__ = "tareas"
@@ -108,3 +108,20 @@ class Tarea(Base):
     usuario_id: Mapped[int] = mapped_column(ForeignKey("usuarios.id"), nullable=False, index=True)
     equipo_id: Mapped[str] = mapped_column(ForeignKey("equipos.id"), nullable=False, index=True)
     equipo: Mapped["Equipo"] = relationship()
+
+class Actividad(Base):
+    __tablename__ = "actividades"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nombre: Mapped[str] = mapped_column(Text, nullable=False)
+    tipo: Mapped[str] = mapped_column(SQLAlchemyEnum('preventivo', 'correctivo', 'diagnostico', name="tipo_actividad"), nullable=False)
+    tipo_respuesta: Mapped[str] = mapped_column(SQLAlchemyEnum('single_choice', 'multiple_choice', name="tipo_respuesta_actividad"), nullable=False)
+    posibles_respuestas: Mapped[list["PosibleRespuesta"]] = relationship("PosibleRespuesta", back_populates="actividad", cascade="all, delete-orphan")
+
+class PosibleRespuesta(Base):
+    __tablename__ = "posibles_respuestas"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    actividad_id: Mapped[int] = mapped_column(ForeignKey("actividades.id"), nullable=False)
+    label: Mapped[str] = mapped_column(String(255), nullable=False)
+    value: Mapped[str] = mapped_column(String(100), nullable=False)
+    respuesta_condicional: Mapped[str] = mapped_column(SQLAlchemyEnum('yes', 'no', name="respuesta_condicional_tipo"), nullable=False)
+    actividad: Mapped["Actividad"] = relationship("Actividad", back_populates="posibles_respuestas")
