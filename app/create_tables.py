@@ -4,8 +4,7 @@ from app.database import engine, Base
 # Importa todos tus modelos para que SQLAlchemy los conozca
 from app.models import (
     Role, Usuario, Parametro, RefreshToken, Tarea,
-    Cliente, Proyecto, Provincia, Ciudad, UnidadNegocio, Agencia, Equipo,
-    Actividad, PosibleRespuesta
+    Cliente, Proyecto, Provincia, Ciudad, UnidadNegocio, Agencia, Equipo
 )
 
 print("Conectando a la base de datos para crear las tablas...")
