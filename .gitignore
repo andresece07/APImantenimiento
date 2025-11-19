@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables (CRITICAL)
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
