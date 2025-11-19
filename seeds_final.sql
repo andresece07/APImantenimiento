@@ -60,5 +60,4 @@ INSERT INTO estados_equipo (id, nombre) VALUES (1, 'pendiente'), (2, 'en progres
 
 INSERT INTO usuarios (id, nombre, email, password_hash, rol_id, activo) VALUES
 (101, 'Juan Perez', 'jp@email.com', '$5$rounds=535000$wG13L87Y5j8V.x.f$Q69R3b.r.x/6z8K/t1k.L.F.pG1sP5v2u.K', 1, TRUE),
-(102, 'Maria Lopez', 'ml@email.com', '$5$rounds=535000$O5s.h.pL1k2p.7.L$J.s.x2t1k.u.4pL.8f.sE6aP1k2p.7.Ld8', 1, TRUE),
-(5, 'admin', 'admin@mantenimiento.com', '$5$rounds=535000$VP
+(102, 'Maria Lopez', 'ml@email.com', '$5$rounds=535000$O5s.h.pL1k2p.7.L$J.s.x2t1k.u.4pL.8f.sE6aP1k2p.7.Ld8', 1, TRUE);

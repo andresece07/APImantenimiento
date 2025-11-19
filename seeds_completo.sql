@@ -23,13 +23,39 @@ CREATE TABLE agencias (id INT PRIMARY KEY, nombre VARCHAR(255) NOT NULL, ciudad_
 CREATE TABLE estados_equipo (id INT PRIMARY KEY, nombre VARCHAR(50) NOT NULL UNIQUE);
 CREATE TABLE equipos (id VARCHAR(50) PRIMARY KEY, nombre VARCHAR(100) NOT NULL, modelo VARCHAR(100) NOT NULL, caracteristicas TEXT, cliente_id INT, proyecto_id INT, provincia_id INT, ciudad_id INT, unidad_negocio_id INT, agencia_id INT, estado_id INT, FOREIGN KEY (cliente_id) REFERENCES clientes(id), FOREIGN KEY (proyecto_id) REFERENCES proyectos(id), FOREIGN KEY (provincia_id) REFERENCES provincias(id), FOREIGN KEY (ciudad_id) REFERENCES ciudades(id), FOREIGN KEY (unidad_negocio_id) REFERENCES unidades_negocio(id), FOREIGN KEY (agencia_id) REFERENCES agencias(id), FOREIGN KEY (estado_id) REFERENCES estados_equipo(id));
 CREATE TABLE tareas (id INT PRIMARY KEY AUTO_INCREMENT, usuario_id INT NOT NULL, equipo_id VARCHAR(50) NOT NULL, FOREIGN KEY (usuario_id) REFERENCES usuarios(id), FOREIGN KEY (equipo_id) REFERENCES equipos(id));
--- Aquí puedes añadir las otras tablas como 'parametros', 'actividades', etc.
+CREATE TABLE refresh_tokens (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    issued_at DATETIME NOT NULL,
+    expires_at DATETIME NOT NULL,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE,
+    user_agent VARCHAR(255),
+    ip VARCHAR(64),
+    FOREIGN KEY (user_id) REFERENCES usuarios(id),
+    INDEX idx_refresh_tokens_expires_at (expires_at),
+    INDEX idx_refresh_tokens_revoked (revoked)
+);
+
+CREATE TABLE parametros (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    clave VARCHAR(100) NOT NULL UNIQUE,
+    valor VARCHAR(255) NOT NULL,
+    tipo ENUM('int','string','bool','json') NOT NULL DEFAULT 'string',
+    descripcion VARCHAR(255)
+);
+
+-- ----------------------------
+-- INSERCIÓN DE DATOS
+-- ----------------------------
+-- Parámetros
+INSERT INTO parametros (clave, valor, tipo, descripcion) VALUES ('sesion.ttl_minutos', '1440', 'int', 'Duración de la sesión en minutos (min 24h)');
 
 -- ----------------------------
 -- INSERCIÓN DE DATOS
 -- ----------------------------
 -- Catálogos
-INSERT INTO roles (id, nombre) VALUES (1, 'Técnico de Campo'), (2, 'Supervisor');
+INSERT INTO roles (id, nombre) VALUES (1, 'Técnico de Campo'), (2, 'Supervisor'), (3, 'Administrador');
 INSERT INTO clientes (id, nombre, nombre_completo) VALUES (1, 'cnel', 'CORPORACION NACIONAL DE ELECTRICIDAD CNEL EP');
 INSERT INTO proyectos (id, nombre, cliente_id) VALUES (1, 'CORP SERVICIO DE SOPORTE MANTENIMIENTO Y GARANTÍA DE LOS EQUIPOS DE NETWORKING HUAWEI DE CNEL EP GTI', 1);
 INSERT INTO provincias (id, nombre) VALUES (9, 'GUAYAS'), (13, 'MANABI');
@@ -40,7 +66,7 @@ INSERT INTO estados_equipo (id, nombre) VALUES (1, 'pendiente'), (2, 'en progres
 
 -- Usuarios (Contraseñas hasheadas: '123' y '456')
 INSERT INTO usuarios (id, nombre, email, password_hash, rol_id, activo) VALUES
-(101, 'Juan Perez', 'jp@email.com', '$2b$12$Gz6A6OAcon42b8d00e.D9uW2z2wm8rev79/UC3S9a9g2mD5.O.mIq', 1, TRUE),
+(101, 'Juan Perez', 'jp@email.com', '$5$rounds=535000$NfJ4MEE4DKzwScsI$UNZES8EGpU.JuR93k5.g.lwrv4xu26nPjOdw2DIt2qB', 3, TRUE),
 (102, 'Maria Lopez', 'ml@email.com', '$2b$12$Y/i1Y0fMv/f9y3oZg.kSTeUa8d298Wb.gmPjD/c9xXzR.Rk4/Jc0K', 1, TRUE);
 
 -- Equipos

@@ -10,8 +10,8 @@ from app.auth import create_access_token, generate_refresh_token, hash_refresh_t
 from app.config import settings
 from app.database import SessionLocal
 from app.deps import get_db
-from app.models import Parametro, RefreshToken, Usuario
-from app.schemas import LoginRequest, RefreshRequest, TokenPair
+from app.models import Parametro, RefreshToken, Usuario, Tarea
+from app.schemas import LoginRequest, RefreshRequest, TokenPair, LoginResponse
 from app.security import verify_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -34,7 +34,7 @@ def get_param_ttl_minutes(db: Session) -> int:
         return 1440
 
 
-@router.post("/login", response_model=TokenPair)
+@router.post("/login", response_model=LoginResponse)
 def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
     user = db.execute(
         select(Usuario).where(Usuario.email == data.email)
@@ -70,9 +70,14 @@ def login(data: LoginRequest, request: Request, db: Session = Depends(get_db)):
         ).update({"revoked": True})
     db.add(r)
     db.commit()
-    return TokenPair(
+
+    # Obtener tareas del usuario para la respuesta completa
+    tasks = db.query(Tarea).filter(Tarea.usuario_id == user.id).all()
+
+    tokens = TokenPair(
         access_token=access_token, refresh_token=refresh_raw, expires_in=expires_in
     )
+    return LoginResponse(tokens=tokens, user=user, tasks=tasks)
 
 
 @router.post("/refresh", response_model=TokenPair)
